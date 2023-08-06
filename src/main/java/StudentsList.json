@@ -1,3 +1,28 @@
 {
-  "name" : "shivam"
+  "students": [
+    {
+      "name": "2",
+      "id": 2,
+      "age": 21,
+      "dob": "20-09-2001"
+    },
+    {
+      "name": "shivam",
+      "id": 3,
+      "age": 21,
+      "dob": "17-08-2001"
+    },
+    {
+      "name": "Rekha",
+      "id": 4,
+      "age": 24,
+      "dob": "12-09-1998"
+    },
+    {
+      "name": "ashish",
+      "id": 9,
+      "age": 32,
+      "dob": "19-08-1990"
+    }
+  ]
 }

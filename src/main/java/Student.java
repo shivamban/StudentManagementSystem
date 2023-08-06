@@ -1,17 +1,17 @@
 public class Student {
     private String name;
-    private final int rollNumber;
+    private final int id;
     private int age;
     private String dob;
 
-    public Student(String name, int rollNumber, String dob) {
+    public Student(String name, int id, String dob) {
         this.name = name;
-        this.rollNumber = rollNumber;
+        this.id = id;
         this.dob = dob;
         this.age = StudentHelper.getAge(dob);
     }
 
-    public static Student getInstance(String name, int rollNumber, String dob) throws IllegalArgumentException {
+    public static Student getInstance(String name, int id, String dob){
         if(name.length() > 25) {
             System.out.println("Name should not exceed 25 characters");
             return null;
@@ -20,15 +20,15 @@ public class Student {
             System.out.println("Please provide the correct date format(dd-MM-yyyy)");
             return null;
         }
-        return new Student(name, rollNumber, dob);
+        return new Student(name, id, dob);
     }
 
     public String getName() {
         return name;
     }
 
-    public int getRollNumber() {
-        return rollNumber;
+    public int getId() {
+        return id;
     }
 
     public int getAge() {
