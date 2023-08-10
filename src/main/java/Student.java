@@ -4,23 +4,16 @@ public class Student {
     private int age;
     private String dob;
 
-    public Student(String name, int id, String dob) {
+    public Student(String name, int id, String dob, int age) {
         this.name = name;
         this.id = id;
         this.dob = dob;
-        this.age = StudentHelper.getAge(dob);
+        this.age = age;
     }
 
-    public static Student getInstance(String name, int id, String dob){
-        if(name.length() > 25) {
-            System.out.println("Name should not exceed 25 characters");
-            return null;
-        }
-        if(!StudentHelper.isDateInCorrectFormat(dob)) {
-            System.out.println("Please provide the correct date format(dd-MM-yyyy)");
-            return null;
-        }
-        return new Student(name, id, dob);
+    public static Student create(String name, int id, String dob){
+        int age = StudentHelper.getAge(dob);
+        return new Student(name, id, dob, age);
     }
 
     public String getName() {

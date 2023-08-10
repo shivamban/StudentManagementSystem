@@ -1,13 +1,13 @@
 # StudentManagementSystem
 
 Requirements:
-1 : The system should allow users to add a new student to the student list. The user should provide the student's ID
-(integer), name (string), and age (integer).
-2 : The system should allow users to remove a student from the student list based on their ID.
-3 : The system should support updating the details of an existing student. Users should be able to select a
-student by their ID and update their name and age. 
-4 : The system should provide an option to search for a student by their ID. Upon searching, the system should display
-the student's details if found or show a message if the student is not found.
+1 : **The system should allow users to add a new student to the student list. The user should provide the student's ID
+(integer), name (string), and age (integer).**
+2 : **The system should allow users to remove a student from the student list based on their ID.**
+3 : **The system should support updating the details of an existing student. Users should be able to select a
+student by their ID and update their name and age.** 
+4 : **The system should provide an option to search for a student by their ID. Upon searching, the system should display
+the student's details if found or show a message if the student is not found.**
 5 : The system should ensure that the student IDs are unique. If a user tries to add a student with an ID that already
 exists, the system should display an appropriate error message and reject the addition.
 6 : The system should provide an option to print the list of students, displaying their ID, name, and age.
