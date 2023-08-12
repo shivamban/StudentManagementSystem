@@ -101,7 +101,7 @@ public class StudentManagementSystem {
 
     }
 
-    public void uploadStudentData() {
+    public void uploadStudentData() throws UserQuitsException{
         String format = "{\n" + "  \"students\": [\n" + "    {\n" + "      \"name\": \"akash\",\n" + "      \"id\": 1,\n" + "      \"age\": 23,\n" + "      \"dob\": \"19-09-1999\"\n" + "    },\n" + "    {\n" + "      \"name\": \"adity chaudhary\",\n" + "      \"id\": 2,\n" + "      \"age\": 21,\n" + "      \"dob\": \"12-07-2002\"\n" + "    }\n]\n}";
         System.out.println("data format : \n" + format);
         String fileName = uploadFileAndGetPath();
@@ -140,7 +140,10 @@ public class StudentManagementSystem {
                             students.put(jsonObject.get("id").getAsInt(), student);
                         }
                     } else {
-                        scanner.nextLine();
+                        String prompt = scanner.nextLine();
+                        if(StudentHelper.checkQuit(prompt)) {
+                            throw new UserQuitsException(Colors.red + "User stopped the server." + Colors.reset);
+                        }
                     }
                 } else {
                     students.put(jsonObject.get("id").getAsInt(), student);

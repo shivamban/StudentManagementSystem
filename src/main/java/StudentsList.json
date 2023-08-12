@@ -19,13 +19,7 @@
       "dob": "19-09-1999"
     },
     {
-      "name": "rohan adsul",
-      "id": 4,
-      "age": 28,
-      "dob": "25-10-1994"
-    },
-    {
-      "name": "alexey kapitanchuk",
+      "name": "Alexey Kapitanchuk",
       "id": 5,
       "age": 25,
       "dob": "12-09-1997"
@@ -107,6 +101,12 @@
       "id": 18,
       "age": 18,
       "dob": "09-09-2004"
+    },
+    {
+      "name": "Rajeev",
+      "id": 19,
+      "age": 22,
+      "dob": "12-08-2001"
     }
   ]
 }
