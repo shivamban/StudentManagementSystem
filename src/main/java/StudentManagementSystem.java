@@ -53,7 +53,7 @@ public class StudentManagementSystem {
     public void downloadStudentData() {
         System.out.println(Colors.yellow + "please enter a filename followed by .json(json format)" + Colors.reset);
         String fileName = scanner.nextLine();
-        if(!fileName.contains(".")) {
+        if (!fileName.contains(".")) {
             fileName = fileName + ".json";
         }
         if (!fileName.endsWith(".json")) {
@@ -161,7 +161,7 @@ public class StudentManagementSystem {
         return filePath;
     }
 
-    public void addStudent() throws UserQuitsException{
+    public void addStudent() throws UserQuitsException {
         String dob, name;
         int id;
         try {
@@ -193,7 +193,7 @@ public class StudentManagementSystem {
 
     }
 
-    public void removeStudent() throws UserQuitsException{
+    public void removeStudent() throws UserQuitsException {
         int id;
         try {
             id = getIdFromUser();
@@ -212,7 +212,7 @@ public class StudentManagementSystem {
         }
     }
 
-    public void updateStudent() throws UserQuitsException{
+    public void updateStudent() throws UserQuitsException {
         String name;
         String dob;
         int id;
@@ -233,7 +233,7 @@ public class StudentManagementSystem {
                 students.put(id, student);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-                return ;
+                return;
             }
             System.out.println(Colors.green + "Updated Student Details : " + new Gson().toJson(students.get(id)));
             System.out.println("Student Updated Successfully." + Colors.reset);
@@ -261,7 +261,7 @@ public class StudentManagementSystem {
     private String getNameFromUser() throws UserQuitsException {
         System.out.print(Colors.yellow + "Please enter a name : " + Colors.reset);
         String name = scanner.nextLine();
-        if(StudentHelper.checkQuit(name)) {
+        if (StudentHelper.checkQuit(name)) {
             throw new UserQuitsException(Colors.red + "User stopped the server." + Colors.reset);
         }
         if (name.length() > 50) {
@@ -277,14 +277,14 @@ public class StudentManagementSystem {
         System.out.print(Colors.yellow + "Please enter an id : " + Colors.reset);
         if (scanner.hasNextInt()) {
             int id = scanner.nextInt();
-            if(id<1) {
+            if (id < 1) {
                 throw new IllegalArgumentException(Colors.red + "Please enter a positive number only." + Colors.reset);
             }
             scanner.nextLine();
             return id;
         } else {
             String prompt = scanner.nextLine();
-            if(StudentHelper.checkQuit(prompt)) {
+            if (StudentHelper.checkQuit(prompt)) {
                 throw new UserQuitsException(Colors.red + "User stopped the server." + Colors.reset);
             }
             throw new IllegalArgumentException(Colors.red + "Please enter a number only as Id is in number format." + Colors.reset);
@@ -294,7 +294,7 @@ public class StudentManagementSystem {
     private String getDobFromUser() throws IllegalArgumentException, UserQuitsException {
         System.out.print(Colors.yellow + "Please enter dob (dd-mm-yyyy format only) : " + Colors.reset);
         String dob = scanner.nextLine();
-        if(StudentHelper.checkQuit(dob)) {
+        if (StudentHelper.checkQuit(dob)) {
             throw new UserQuitsException(Colors.red + "User stopped the server." + Colors.reset);
         }
         if (StudentHelper.isDateInCorrectFormat(dob)) {

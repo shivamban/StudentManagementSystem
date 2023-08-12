@@ -1,12 +1,10 @@
-import javax.xml.crypto.Data;
-import java.awt.*;
 import java.util.Date;
 import java.util.Scanner;
 
 public class Start {
     public static boolean isActice = true;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         StudentManagementSystem studentManagementSystem = new StudentManagementSystem();
         String instruction = Colors.blue + "WRITE \"OUT\" AT ANY TIME TO QUIT." +
                 "Please choose one of the following options : \n" +
@@ -103,7 +101,8 @@ public class Start {
                         isActice = false;
                         break;
                     default:
-                        System.out.println(Colors.red + "Entered number should be between 1-8 including 1 and 8. Remaining Attempts : " + --maxAttempts + Colors.reset);
+                        System.out.println(Colors.red + "Entered number should be between 1-8 including 1 and 8. Remaining Attempts : "
+                                + --maxAttempts + Colors.reset);
                         break;
                 }
             } catch (UserQuitsException e) {

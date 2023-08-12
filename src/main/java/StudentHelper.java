@@ -1,10 +1,7 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 public class StudentHelper {
 
@@ -24,7 +21,7 @@ public class StudentHelper {
         LocalDate currentDate = LocalDate.now();
         Period period = Period.between(dateOfBirth, currentDate);
         int age = period.getYears();
-        if(age < 5) {
+        if (age < 5) {
             throw new IllegalArgumentException(Colors.red + "Age should atleast be 5 years. Age Provided : " + age + Colors.reset);
         }
         return age;

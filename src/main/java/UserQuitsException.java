@@ -1,4 +1,4 @@
-public class UserQuitsException extends Exception{
+public class UserQuitsException extends Exception {
     public UserQuitsException() {
         super();
     }
