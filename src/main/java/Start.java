@@ -8,7 +8,8 @@ public class Start {
 
     public static void main(String[] args){
         StudentManagementSystem studentManagementSystem = new StudentManagementSystem();
-        String instruction = Colors.blue + "Please choose one of the following options : \n" +
+        String instruction = Colors.blue + "WRITE \"OUT\" AT ANY TIME TO QUIT." +
+                "Please choose one of the following options : \n" +
                 "1 -> Add Student, \n2 -> Remove Student, \n3 -> Update Student, \n4 -> Search Student" +
                 "\n5 -> Display All Student, \n6 -> Download Student data, \n7 -> Upload students from a file, " +
                 "\n8 -> Save current data to Storage, \n9 -> Revert all the changes, \n10 -> Quit" + Colors.reset;
