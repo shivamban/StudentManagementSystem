@@ -11,7 +11,7 @@ public class Student {
         this.age = age;
     }
 
-    public static Student create(String name, int id, String dob){
+    public static Student create(String name, int id, String dob) throws IllegalArgumentException{
         int age = StudentHelper.getAge(dob);
         return new Student(name, id, dob, age);
     }

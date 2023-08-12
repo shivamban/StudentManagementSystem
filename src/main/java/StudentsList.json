@@ -1,1 +1,58 @@
-{"students" : [{"name":"akash","id":1,"age":23,"dob":"19-09-1999"},{"name":"2","id":2,"age":21,"dob":"20-09-2001"},{"name":"shivam","id":3,"age":21,"dob":"17-08-2001"},{"name":"Rekha","id":4,"age":24,"dob":"12-09-1998"}]}
+{
+  "students": [
+    {
+      "name": "akash",
+      "id": 1,
+      "age": 23,
+      "dob": "19-09-1999"
+    },
+    {
+      "name": "adity chaudhary",
+      "id": 2,
+      "age": 21,
+      "dob": "12-07-2002"
+    },
+    {
+      "name": "shivam",
+      "id": 3,
+      "age": 21,
+      "dob": "17-08-2001"
+    },
+    {
+      "name": "Rekha",
+      "id": 4,
+      "age": 24,
+      "dob": "12-09-1998"
+    },
+    {
+      "name": "alexey kapitanchuk",
+      "id": 5,
+      "age": 25,
+      "dob": "12-09-1997"
+    },
+    {
+      "name": "abhinav",
+      "id": 6,
+      "age": 20,
+      "dob": "01-02-2003"
+    },
+    {
+      "name": "binesh b",
+      "id": 7,
+      "age": 18,
+      "dob": "09-09-2004"
+    },
+    {
+      "name": "durga rani",
+      "id": 8,
+      "age": 23,
+      "dob": "29-12-1999"
+    },
+    {
+      "name": "gorantala madhu mohan",
+      "id": 9,
+      "age": 20,
+      "dob": "20-01-2003"
+    }
+  ]
+}

@@ -7,7 +7,8 @@ public class Start {
         StudentManagementSystem studentManagementSystem = new StudentManagementSystem();
         String instruction = Colors.blue + "Please choose one of the following options : \n" +
                 "1 -> Add Student, \n2 -> Remove Student, \n3 -> Update Student, \n4 -> Search Student" +
-                "\n5 -> Display All Student, \n6 -> Download Student data, \n7 -> upload students from a file, \n8 -> Quit" + Colors.reset;
+                "\n5 -> Display All Student, \n6 -> Download Student data, \n7 -> Upload students from a file, " +
+                "\n8 -> Save current data to Storage, \n9 -> Revert all the changes, \n10 -> Quit" + Colors.reset;
         boolean isActice = true;
         int choice = 0;
         int maxAttempts = 5;
@@ -51,6 +52,13 @@ public class Start {
                     studentManagementSystem.uploadStudentData();
                     break;
                 case 8:
+                    studentManagementSystem.saveStudentData();
+                    break;
+                case 9:
+                    studentManagementSystem.fetchStudents();
+                    System.out.println(Colors.green + "Student data is reverted." + Colors.reset);
+                    break;
+                case 10:
                     studentManagementSystem.saveStudentData();
                     isActice = false;
                     break;

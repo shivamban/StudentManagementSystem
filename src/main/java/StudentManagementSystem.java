@@ -2,11 +2,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +23,7 @@ public class StudentManagementSystem {
 
     public void fetchStudents() {
         String filename = "src/main/java/StudentsList.json";
+        students.clear();
         try {
             FileInputStream input;
             input = new FileInputStream(filename);
@@ -33,10 +34,13 @@ public class StudentManagementSystem {
             JsonArray array = json.getAsJsonArray("students");
             for (int i = 0; i < array.size(); i++) {
                 JsonObject student = (JsonObject) array.get(i);
-                Student student1 = Student.create(student.get("name").getAsString(), student.get("id").getAsInt(), student.get("dob").getAsString());
-                if (student1 != null) {
+                try {
+                    Student student1 = Student.create(student.get("name").getAsString(), student.get("id").getAsInt(), student.get("dob").getAsString());
                     students.put(student.get("id").getAsInt(), student1);
+                } catch (IllegalArgumentException e) {
+                    e.getMessage();
                 }
+
             }
             input.close();
         } catch (IOException e) {
@@ -45,10 +49,10 @@ public class StudentManagementSystem {
     }
 
     public void downloadStudentData() {
-        System.out.println("please enter a filename followed by .json(json format)");
+        System.out.println(Colors.yellow + "please enter a filename followed by .json(json format)" + Colors.reset);
         String fileName = scanner.nextLine();
         if (!fileName.endsWith(".json")) {
-            System.out.println("Provided file name is not with json format.");
+            System.out.println(Colors.red + "Provided file name is not in json format." + Colors.reset);
             return;
         }
         try {
@@ -62,8 +66,9 @@ public class StudentManagementSystem {
                 }
             }
             outputStream.write("]}".getBytes(StandardCharsets.UTF_8));
-//            outputStream.flush();
             outputStream.close();
+            System.out.println(Colors.green + "You have successfully downloaded student data in " + fileName);
+            System.out.println("Go to files/" + fileName + " to see the file." + Colors.reset);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -91,54 +96,96 @@ public class StudentManagementSystem {
     }
 
     public void uploadStudentData() {
-        System.out.println("Please provide a file's absolute path.");
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("File Chooser Example");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            JButton openButton = new JButton("Open File");
-            openButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    JFileChooser fileChooser = new JFileChooser();
-                    int result = fileChooser.showOpenDialog(frame);
-
-                    if (result == JFileChooser.APPROVE_OPTION) {
-                        String selectedFilePath = fileChooser.getSelectedFile().getAbsolutePath();
-                        System.out.println("Selected file: " + selectedFilePath);
-                        frame.dispose();
-                    } else {
-                        System.out.println("No file selected.");
-                    }
+        String format = "{\n" + "  \"students\": [\n" + "    {\n" + "      \"name\": \"akash\",\n" + "      \"id\": 1,\n" + "      \"age\": 23,\n" + "      \"dob\": \"19-09-1999\"\n" + "    },\n" + "    {\n" + "      \"name\": \"adity chaudhary\",\n" + "      \"id\": 2,\n" + "      \"age\": 21,\n" + "      \"dob\": \"12-07-2002\"\n" + "    }\n]\n}";
+        System.out.println("data format : \n" + format);
+        String fileName = uploadFileAndGetPath();
+        if (!fileName.endsWith(".json")) {
+            System.out.println(Colors.red + "Only Json Files are accepted." + Colors.reset);
+            return;
+        }
+        try (FileInputStream input = new FileInputStream(fileName)) {
+            byte[] bytes = input.readAllBytes();
+            String data = new String(bytes);
+            System.out.println(data);
+            Gson gson = new Gson();
+            JsonObject json = gson.fromJson(data, JsonObject.class);
+            if (json.get("students") == null) {
+                System.out.println(Colors.red + "File can not be uploaded. Please check if the data is in correct format." + Colors.reset);
+            }
+            JsonArray array = json.getAsJsonArray("students");
+            for (int i = 0; i < array.size(); i++) {
+                JsonObject jsonObject = (JsonObject) array.get(i);
+                Student student;
+                try {
+                    student = Student.create(jsonObject.get("name").getAsString(), jsonObject.get("id").getAsInt(), jsonObject.get("dob").getAsString());
+                } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
+                    continue;
                 }
-            });
+                if (students.containsKey(student.getId())) {
+                    Student currentStudent = students.get(student.getId());
+                    System.out.println(Colors.blue + "Student with id = " + student.getId() + ", already exist. This is the current student details :");
+                    System.out.println(new Gson().toJson(currentStudent));
+                    System.out.println("After update, student details will be : ");
+                    System.out.println(new Gson().toJson(student) + Colors.reset);
+                    System.out.print(Colors.yellow + "Enter 1 to update : " + Colors.reset);
+                    if (scanner.hasNextInt()) {
+                        int choice = scanner.nextInt();
+                        if (choice == 1) {
+                            students.put(jsonObject.get("id").getAsInt(), student);
+                        }
+                    } else {
+                        scanner.nextLine();
+                    }
+                } else {
+                    students.put(jsonObject.get("id").getAsInt(), student);
+                }
 
-            frame.getContentPane().add(openButton);
-            frame.pack();
-            frame.setVisible(true);
-        });
-        System.out.println("this ended here");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String uploadFileAndGetPath() {
+        Frame frame = new Frame();
+        FileDialog fileDialog = new FileDialog(frame, "Upload a File", FileDialog.LOAD);
+        fileDialog.setVisible(true);
+        String filePath = fileDialog.getDirectory() + fileDialog.getFile();
+        frame.dispose();
+        return filePath;
     }
 
     public void addStudent() {
         String dob, name;
         int id;
         try {
-            name = getNameFromUser();
             id = getIdFromUser();
-            dob = getDobFromUser();
         } catch (IllegalArgumentException e) {
-            scanner.nextLine();
             System.out.println(e.getMessage());
             return;
         }
-        Student student = Student.create(name, id, dob);
-        if (students.get(id) == null) {
+
+        if (students.get(id) != null) {
+            System.out.println(Colors.red + "Student with id : " + id + " already exists." + Colors.reset);
+            return;
+        }
+
+        try {
+            name = getNameFromUser();
+            dob = getDobFromUser();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        try {
+            Student student = Student.create(name, id, dob);
             students.put(id, student);
             System.out.println(Colors.green + "Student added successfully." + Colors.reset);
-        } else {
-            System.out.println(Colors.red + "Student with id : " + id + " already exists." + Colors.reset);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     public void removeStudent() {
@@ -170,14 +217,19 @@ public class StudentManagementSystem {
             System.out.println(e.getMessage());
             return;
         }
-        if(students.get(id) == null) {
+        if (students.get(id) == null) {
             System.out.println(Colors.red + "Student with id = " + id + ", doesn't exist" + Colors.reset);
         } else {
             System.out.println(Colors.green + "Current Student Details : " + new Gson().toJson(students.get(id)));
-            name = getNameFromUser();
-            dob = getDobFromUser();
-            Student student = Student.create(name, id, dob);
-            students.put(id, student);
+            try {
+                name = getNameFromUser();
+                dob = getDobFromUser();
+                Student student = Student.create(name, id, dob);
+                students.put(id, student);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                return ;
+            }
             System.out.println(Colors.green + "Updated Student Details : " + new Gson().toJson(students.get(id)));
             System.out.println("Student Updated Successfully." + Colors.reset);
         }
@@ -193,10 +245,10 @@ public class StudentManagementSystem {
         }
         if (students.get(id) != null) {
             Student student = students.get(id);
-            System.out.println(new Gson().toJson(student));
+            System.out.println(Colors.green + new Gson().toJson(student) + Colors.reset);
             return student;
         } else {
-            System.out.println("Student with rollNumber=" + id + ", doesn't exist.");
+            System.out.println(Colors.red + "Student with rollNumber=" + id + ", doesn't exist." + Colors.reset);
             return null;
         }
     }
@@ -217,9 +269,13 @@ public class StudentManagementSystem {
         System.out.print(Colors.yellow + "Please enter an id : " + Colors.reset);
         if (scanner.hasNextInt()) {
             int id = scanner.nextInt();
+            if(id<1) {
+                throw new IllegalArgumentException(Colors.red + "Please enter a positive number only." + Colors.reset);
+            }
             scanner.nextLine();
             return id;
         } else {
+            scanner.nextLine();
             throw new IllegalArgumentException(Colors.red + "Please enter a number only as Id is in number format." + Colors.reset);
         }
     }

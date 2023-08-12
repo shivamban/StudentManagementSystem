@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class StudentHelper {
 
-    public static boolean isDateInCorrectFormat(String dob){
+    public static final boolean isDateInCorrectFormat(String dob) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         try {
             dateFormatter.parse(dob);
@@ -18,15 +18,15 @@ public class StudentHelper {
         }
     }
 
-    public static final int getAge(String dob) {
-        try {
-            LocalDate dateOfBirth = LocalDate.parse(dob, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-            LocalDate currentDate = LocalDate.now();
-            Period period = Period.between(dateOfBirth, currentDate);
-            return period.getYears();
-        } catch (Exception e) {
-            System.out.println("Error : " + e.getMessage());
+    public static final int getAge(String dob) throws IllegalArgumentException {
+
+        LocalDate dateOfBirth = LocalDate.parse(dob, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate currentDate = LocalDate.now();
+        Period period = Period.between(dateOfBirth, currentDate);
+        int age = period.getYears();
+        if(age < 5) {
+            throw new IllegalArgumentException(Colors.red + "Age should atleast be 5 years. Age Provided : " + age + Colors.reset);
         }
-        return 0;
+        return age;
     }
 }
