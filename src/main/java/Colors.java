@@ -4,4 +4,5 @@ public class Colors {
     public static final String green = "\u001B[32m";
     public static final String yellow = "\u001B[33m";
     public static final String blue = "\u001B[34m";
+    public static final String ORANGE = "\u001B[38;5;208m";
 }

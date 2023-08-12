@@ -29,4 +29,8 @@ public class StudentHelper {
         }
         return age;
     }
+
+    public static final boolean checkQuit(String prompt) {
+        return prompt.equalsIgnoreCase("OUT");
+    }
 }

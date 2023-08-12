@@ -18,7 +18,9 @@ public class StudentManagementSystem {
     Scanner scanner = new Scanner(System.in);
 
     public StudentManagementSystem() {
+        System.out.println(Colors.ORANGE + "Loading the Students data from StudentsList.json ..." + Colors.reset);
         fetchStudents();
+        System.out.println(Colors.ORANGE + "Loading finished" + Colors.reset);
     }
 
     public void fetchStudents() {
@@ -51,6 +53,9 @@ public class StudentManagementSystem {
     public void downloadStudentData() {
         System.out.println(Colors.yellow + "please enter a filename followed by .json(json format)" + Colors.reset);
         String fileName = scanner.nextLine();
+        if(!fileName.contains(".")) {
+            fileName = fileName + ".json";
+        }
         if (!fileName.endsWith(".json")) {
             System.out.println(Colors.red + "Provided file name is not in json format." + Colors.reset);
             return;
@@ -68,7 +73,7 @@ public class StudentManagementSystem {
             outputStream.write("]}".getBytes(StandardCharsets.UTF_8));
             outputStream.close();
             System.out.println(Colors.green + "You have successfully downloaded student data in " + fileName);
-            System.out.println("Go to files/" + fileName + " to see the file." + Colors.reset);
+            System.out.println("After you stop the server, go to files/" + fileName + " to see the file." + Colors.reset);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -89,6 +94,7 @@ public class StudentManagementSystem {
             }
             fileWriter.write("]}");
             fileWriter.close();
+            System.out.println(Colors.green + "Student data saved successfully" + Colors.reset);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -106,7 +112,6 @@ public class StudentManagementSystem {
         try (FileInputStream input = new FileInputStream(fileName)) {
             byte[] bytes = input.readAllBytes();
             String data = new String(bytes);
-            System.out.println(data);
             Gson gson = new Gson();
             JsonObject json = gson.fromJson(data, JsonObject.class);
             if (json.get("students") == null) {
@@ -140,8 +145,8 @@ public class StudentManagementSystem {
                 } else {
                     students.put(jsonObject.get("id").getAsInt(), student);
                 }
-
             }
+            System.out.println(Colors.green + "Students data updated from the file : " + fileName + Colors.reset);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -156,7 +161,7 @@ public class StudentManagementSystem {
         return filePath;
     }
 
-    public void addStudent() {
+    public void addStudent() throws UserQuitsException{
         String dob, name;
         int id;
         try {
@@ -188,7 +193,7 @@ public class StudentManagementSystem {
 
     }
 
-    public void removeStudent() {
+    public void removeStudent() throws UserQuitsException{
         int id;
         try {
             id = getIdFromUser();
@@ -207,7 +212,7 @@ public class StudentManagementSystem {
         }
     }
 
-    public void updateStudent() {
+    public void updateStudent() throws UserQuitsException{
         String name;
         String dob;
         int id;
@@ -235,7 +240,7 @@ public class StudentManagementSystem {
         }
     }
 
-    public Student searchStudent() {
+    public Student searchStudent() throws UserQuitsException {
         int id;
         try {
             id = getIdFromUser();
@@ -248,24 +253,27 @@ public class StudentManagementSystem {
             System.out.println(Colors.green + new Gson().toJson(student) + Colors.reset);
             return student;
         } else {
-            System.out.println(Colors.red + "Student with rollNumber=" + id + ", doesn't exist." + Colors.reset);
+            System.out.println(Colors.red + "Student with id=" + id + ", doesn't exist." + Colors.reset);
             return null;
         }
     }
 
-    private String getNameFromUser() {
+    private String getNameFromUser() throws UserQuitsException {
         System.out.print(Colors.yellow + "Please enter a name : " + Colors.reset);
         String name = scanner.nextLine();
+        if(StudentHelper.checkQuit(name)) {
+            throw new UserQuitsException(Colors.red + "User stopped the server." + Colors.reset);
+        }
         if (name.length() > 50) {
             throw new IllegalArgumentException(Colors.red + "The name should not exceed 50 characters." + Colors.reset);
         } else if (name.isBlank()) {
             throw new IllegalArgumentException(Colors.red + "This is not a valid name" + Colors.reset);
         } else {
-            return name.toLowerCase();
+            return name;
         }
     }
 
-    private int getIdFromUser() throws IllegalArgumentException {
+    private int getIdFromUser() throws IllegalArgumentException, UserQuitsException {
         System.out.print(Colors.yellow + "Please enter an id : " + Colors.reset);
         if (scanner.hasNextInt()) {
             int id = scanner.nextInt();
@@ -275,14 +283,20 @@ public class StudentManagementSystem {
             scanner.nextLine();
             return id;
         } else {
-            scanner.nextLine();
+            String prompt = scanner.nextLine();
+            if(StudentHelper.checkQuit(prompt)) {
+                throw new UserQuitsException(Colors.red + "User stopped the server." + Colors.reset);
+            }
             throw new IllegalArgumentException(Colors.red + "Please enter a number only as Id is in number format." + Colors.reset);
         }
     }
 
-    private String getDobFromUser() throws IllegalArgumentException {
+    private String getDobFromUser() throws IllegalArgumentException, UserQuitsException {
         System.out.print(Colors.yellow + "Please enter dob (dd-mm-yyyy format only) : " + Colors.reset);
         String dob = scanner.nextLine();
+        if(StudentHelper.checkQuit(dob)) {
+            throw new UserQuitsException(Colors.red + "User stopped the server." + Colors.reset);
+        }
         if (StudentHelper.isDateInCorrectFormat(dob)) {
             return dob;
         } else {
